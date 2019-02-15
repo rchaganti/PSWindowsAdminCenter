@@ -38,35 +38,13 @@
         }
     }
 
-    $requestUri = [Uri]"${GatewayEndpoint}/api/extensions/configs"
-    $reqParams = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
-        Method = 'Put'
-        Body = (ConvertTo-Json -InputObject $feedObject)
-    }
+    $params.Add('APIEndpoint',$APIEndpoint)
+    $params.Add('Method','Put')
 
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
+    $requestParameters = Get-RequestParameter @params
+    $requestParameters.Add('Body', (ConvertTo-Json -InputObject $feedObject))
 
-    if ($clientCertificateThumbprint)
-    {
-        $reqParams.Add('CertificateThumbprint', "$certificateThumbprint")
-    }
-
-    if ($Credential)
-    {
-        $reqParams.Credential = $Credential
-    }
-    else
-    {
-        $reqParams.UseDefaultCredentials = $True
-    }
-
-    $response = Invoke-WebRequest @reqParams -ErrorAction Stop
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     if ($response.StatusCode -ne 200 )
     {
         throw "Failed to add the feed in the gateway"

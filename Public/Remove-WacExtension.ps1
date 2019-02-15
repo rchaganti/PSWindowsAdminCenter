@@ -16,12 +16,35 @@ Function Remove-WacExtension
         $Credential
     )
 
+    $getParams = @{
+        GatewayEndpoint = $GatewayEndpoint
+        ExtensionID = $ExtensionId
+    }
+
+    if ($Credential)
+    {
+        $getParams.Add('Credential',$Credential)
+    }
+
+    $existingExtensions = Get-WacExtension @getParams
+    if ($existingExtensions.id -contains $ExtensionId)
+    {
+        if ($existingExtensions.Where({$_.id -eq $ExtensionId}).Status -eq 'Available')
+        {
+            throw "$ExtensionId is not installed."
+        }
+    }
+    else
+    {
+        throw "$ExtensionId is not available in the WAC extension list."
+    }
+
     $requestUri = [Uri]"${GatewayEndpoint}/api/extensions"
     $params = @{
         UseBasicParsing = $true
         UserAgent = 'PowerShell'
         Uri = $requestUri.OriginalString
-        Method = 'Get'
+        Method = 'put'
     }
 
     if ($requestUri.Host -eq 'localhost')
@@ -55,9 +78,7 @@ Function Remove-WacExtension
             $propertyName = $property.Name
             $extensionHash | Add-Member -MemberType NoteProperty -Name $propertyName -Value $extension.$propertyName
         }
-
+ 
         $extensionObject += $extensionHash
     }
-
-    return $extensionObject
 }

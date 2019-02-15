@@ -7,70 +7,61 @@ function Add-WacConnection
         [String]
         $GatewayEndpoint,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [String]
-        $Name,
+        $ConnectionName,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('msft.sme.connection-type.server','msft.sme.connection-type.cluster','msft.sme.connection-type.hyper-converged-cluster')]
+        [String]
+        $ConnectionType,
+
+        [Parameter()]
+        [String[]]
+        $Tags,
 
         [Parameter()]
         [PSCredential]
         $Credential
     )
-
-    $requestUri = [Uri]"${GatewayEndpoint}/api/connections"
+    
     $params = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
-        Method = 'Get'
-    }
-
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
-
-    if ($clientCertificateThumbprint)
-    {
-        $params.Add('CertificateThumbprint', "$certificateThumbprint")
+        GatewayEndpoint = $GatewayEndpoint
     }
 
     if ($Credential)
     {
-        $params.Credential = $Credential
+        $params.Add('Credential',$Credential)
     }
-    else
+    
+    $existingConections = [PSCustomObject[]](Get-WacConnection @params)
+    if ($existingConections.Where({$_.Type -eq $ConnectionType}).Name -contains $ConnectionName)
     {
-        $params.UseDefaultCredentials = $True
+        throw "$ConnectionName of type $ConnectionType already exists in WAC"
     }
+    
+    $params.Add('APIEndpoint', '/api/connections')
+    $params.Add('Method','Put')
 
-    $response = Invoke-WebRequest @params -ErrorAction Stop
-    $allConnections = (ConvertFrom-Json -InputObject $response.Content).Value.Properties
-   
-    if ($Name)
-    {
-        $connections = $allConnections.Where({$_.Name -eq $Name})
-    }
-    else
-    {
-        $connections = $allConnections
-    }
+    $requestParameters = Get-RequestParameter @params
 
     $connectionObject = @()
-    foreach ($conn in $connections)
-    {
-        $connHash = [PSCustomObject] @{}
-        $connHash | Add-Member -MemberType NoteProperty -Name Name -Value $conn.name
-        $connHash | Add-Member -MemberType NoteProperty -Name id -Value $conn.id
-        $connHash | Add-Member -MemberType NoteProperty -Name type -Value $conn.type
-
-        foreach ($property in $conn.properties.psobject.Properties)
-        {
-            $propertyName = $property.Name
-            $connHash | Add-Member -MemberType NoteProperty -Name $propertyName -Value $conn.properties.$propertyName
-        }
-
-        $connectionObject += $connHash
+    $connectionObject += @{
+        name = $ConnectionName
+        type = $ConnectionType
+        id = "${ConnectionType}!${ConnectionName}"
+        tags = $Tags
     }
 
-    return $connectionObject
+    $requestParameters.Add('Body', '[' + $($connectionObject | ConvertTo-Json) + ']')
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
+
+    if ($response.StatusCode -eq 200)
+    {
+        return ($response.Content | ConvertFrom-Json).Changes
+    }
+    else
+    {
+        throw "Error adding $ConnectionName of type $ConnectionType"
+    }
 }

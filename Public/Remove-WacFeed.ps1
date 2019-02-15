@@ -38,35 +38,13 @@
         }
     }
 
-    $requestUri = [Uri]"${GatewayEndpoint}/api/extensions/configs"
-    $reqParams = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
-        Method = 'Put'
-        Body = (ConvertTo-Json -InputObject $feedObject)
-    }
-
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
-
-    if ($clientCertificateThumbprint)
-    {
-        $reqParams.Add('CertificateThumbprint', "$certificateThumbprint")
-    }
-
-    if ($Credential)
-    {
-        $reqParams.Credential = $Credential
-    }
-    else
-    {
-        $reqParams.UseDefaultCredentials = $True
-    }
-
-    $response = Invoke-WebRequest @reqParams -ErrorAction Stop
+    $params.Add('APIEndpoint', $APIEndpoint)
+    $params.Add('Method','Put')
+    
+    $requestParameters = Get-RequestParameter @params    
+    $requestParameters.Add('Body', (ConvertTo-Json -InputObject $feedObject))
+    
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     if ($response.StatusCode -ne 200 )
     {
         throw "Failed to remove the feed from the gateway"

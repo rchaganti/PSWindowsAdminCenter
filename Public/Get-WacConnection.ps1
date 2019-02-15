@@ -16,34 +16,20 @@
         $Credential
     )
 
-    $requestUri = [Uri]"${GatewayEndpoint}/api/connections"
     $params = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
+        GatewayEndpoint = $GatewayEndpoint
         Method = 'Get'
-    }
-
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
-
-    if ($clientCertificateThumbprint)
-    {
-        $params.Add('CertificateThumbprint', "$certificateThumbprint")
+        APIEndpoint = '/api/connections'
     }
 
     if ($Credential)
     {
-        $params.Credential = $Credential
-    }
-    else
-    {
-        $params.UseDefaultCredentials = $True
+        $params.Add('Credential', $Credential)
     }
 
-    $response = Invoke-WebRequest @params -ErrorAction Stop
+    $requestParameters = Get-RequestParameter @params
+
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     $allConnections = (ConvertFrom-Json -InputObject $response.Content).Value.Properties
    
     if ($Name)
@@ -62,6 +48,7 @@
         $connHash | Add-Member -MemberType NoteProperty -Name Name -Value $conn.name
         $connHash | Add-Member -MemberType NoteProperty -Name id -Value $conn.id
         $connHash | Add-Member -MemberType NoteProperty -Name type -Value $conn.type
+        $connHash | Add-Member -MemberType NoteProperty -Name tags -Value $conn.tags
 
         foreach ($property in $conn.properties.psobject.Properties)
         {

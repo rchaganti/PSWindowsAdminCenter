@@ -13,7 +13,12 @@
 
         [Parameter()]
         [PSCredential]
-        $Credential
+        $Credential,
+
+        [Parameter()]
+        [ValidateSet('Installed','Available','All')]
+        [String]
+        $Status = 'All'
     )
 
     $requestUri = [Uri]"${GatewayEndpoint}/api/extensions"
@@ -58,6 +63,13 @@
 
         $extensionObject += $extensionHash
     }
-
-    return $extensionObject
+    
+    if ($Status -ne 'All')
+    {
+        return $extensionObject.Where({$_.Status -eq $Status})
+    }
+    else
+    {
+        return $extensionObject
+    }
 }

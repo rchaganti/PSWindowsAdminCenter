@@ -12,34 +12,20 @@
         $Credential
     )
 
-    $requestUri = [Uri]"${GatewayEndpoint}/api/extensions/configs"
     $params = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
+        GatewayEndpoint = $GatewayEndpoint
+        APIEndpoint = '/api/extensions/configs'
         Method = 'Get'
-    }
-
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
-
-    if ($clientCertificateThumbprint)
-    {
-        $params.Add('CertificateThumbprint', "$certificateThumbprint")
     }
 
     if ($Credential)
     {
-        $params.Credential = $Credential
-    }
-    else
-    {
-        $params.UseDefaultCredentials = $True
+        $params.Add('Credential',$Credential)
     }
 
-    $response = Invoke-WebRequest @params -ErrorAction Stop
+    $requestParameters = Get-RequestParameter @params
+    
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     $feeds = ConvertFrom-Json -InputObject $response.Content
 
     $feedObject = @()
