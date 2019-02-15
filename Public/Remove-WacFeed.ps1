@@ -38,12 +38,12 @@
         }
     }
 
-    $params.Add('APIEndpoint', $APIEndpoint)
+    $params.Add('APIEndpoint', '/api/extensions/configs')
     $params.Add('Method','Put')
     
     $requestParameters = Get-RequestParameter @params    
     $requestParameters.Add('Body', (ConvertTo-Json -InputObject $feedObject))
-    
+
     $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     if ($response.StatusCode -ne 200 )
     {

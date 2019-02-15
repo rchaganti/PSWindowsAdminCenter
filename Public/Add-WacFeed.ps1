@@ -38,7 +38,7 @@
         }
     }
 
-    $params.Add('APIEndpoint',$APIEndpoint)
+    $params.Add('APIEndpoint','/api/extensions/configs')
     $params.Add('Method','Put')
 
     $requestParameters = Get-RequestParameter @params
