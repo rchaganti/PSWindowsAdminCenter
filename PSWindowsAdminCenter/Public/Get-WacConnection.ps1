@@ -35,7 +35,7 @@
     if ($response.StatusCode -eq 200)
     {
         $allConnections = (ConvertFrom-Json -InputObject $response.Content).Value.Properties
-    
+
         if ($Name)
         {
             $connections = $allConnections.Where({$_.Name -eq $Name})

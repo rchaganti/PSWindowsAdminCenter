@@ -24,7 +24,7 @@ function Add-WacConnection
         [PSCredential]
         $Credential
     )
-    
+
     $params = @{
         GatewayEndpoint = $GatewayEndpoint
     }
@@ -33,13 +33,13 @@ function Add-WacConnection
     {
         $params.Add('Credential',$Credential)
     }
-    
+
     $existingConections = [PSCustomObject[]](Get-WacConnection @params)
     if ($existingConections.Where({$_.Type -eq $ConnectionType}).Name -contains $ConnectionName)
     {
         throw "$ConnectionName of type $ConnectionType already exists in WAC"
     }
-    
+
     $params.Add('APIEndpoint', '/api/connections')
     $params.Add('Method','Put')
 

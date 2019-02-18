@@ -1,6 +1,7 @@
 function Get-RequestParameter
 {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -28,7 +29,7 @@ function Get-RequestParameter
         Uri = $requestUri.OriginalString
         Method = $Method
     }
-    
+
     if ($requestUri.Host -eq 'localhost')
     {
         $certThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint

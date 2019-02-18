@@ -54,7 +54,7 @@
 
             $extensionObject += $extensionHash
         }
-        
+
         if ($Status -ne 'All')
         {
             $extensions = $extensionObject.Where({$_.Status -eq $Status})
@@ -75,6 +75,6 @@
     }
     else
     {
-        throw 'Error invoking get WAC extension api ...'    
+        throw 'Error invoking get WAC extension api ...'
     }
 }

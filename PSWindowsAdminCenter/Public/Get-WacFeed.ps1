@@ -25,7 +25,7 @@
 
     Write-Verbose -Message 'Generating request parameters ...'
     $requestParameters = Get-RequestParameter @params
-    
+
     Write-Verbose -Message 'Invoking get WAC feed api ...'
     $response = Invoke-WebRequest @requestParameters -ErrorAction SilentlyContinue
     if ($response.StatusCode -eq 200)
@@ -46,6 +46,6 @@
     }
     else
     {
-        throw 'Error invoking get WAC feed api ...'    
+        throw 'Error invoking get WAC feed api ...'
     }
 }

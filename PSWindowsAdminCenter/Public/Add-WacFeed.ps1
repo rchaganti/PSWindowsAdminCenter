@@ -1,5 +1,5 @@
 ﻿function Add-WacFeed
-{    
+{
     [CmdletBinding()]
     param
     (
@@ -27,10 +27,9 @@
 
     Write-Verbose -Message 'Getting existing WAC feeds ...'
     $feeds = Get-WacFeed @params
-    
     if ($feeds.Path -Contains $Path)
     {
-        throw "${Path} exists in Windows Admin Center as a feed."       
+        throw "${Path} exists in Windows Admin Center as a feed."
     }
     else
     {

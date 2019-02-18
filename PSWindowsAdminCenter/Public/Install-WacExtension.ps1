@@ -46,15 +46,15 @@
 
         $params = @{
             GatewayEndpoint = $GatewayEndpoint
-            APIEndpoint = "/api/extensions/$($extensionId)/versions/$($extensionVersion)/install" 
-            Method = 'Post'  
-        }    
+            APIEndpoint = "/api/extensions/$($extensionId)/versions/$($extensionVersion)/install"
+            Method = 'Post'
+        }
 
         if ($Credential)
         {
             $params.Add('Credential',$Credential)
         }
-        
+
         Write-Verbose -Message 'Generating request parameters ...'
         $requestParameters = Get-RequestParameter @params
 
@@ -67,7 +67,7 @@
                 extensionId = $ExtensionId
                 Status = 'Installed'
             }
-            
+
             if ($Credential)
             {
                 $getParams.Add('Credential', $Credential)
@@ -77,7 +77,7 @@
         }
         else
         {
-            throw 'Error invoking install WAC extension api ...'    
+            throw 'Error invoking install WAC extension api ...'
         }
     }
     else
