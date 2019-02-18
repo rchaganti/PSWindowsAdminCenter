@@ -21,34 +21,20 @@
         $Status = 'All'
     )
 
-    $requestUri = [Uri]"${GatewayEndpoint}/api/extensions"
     $params = @{
-        UseBasicParsing = $true
-        UserAgent = 'PowerShell'
-        Uri = $requestUri.OriginalString
+        GatewayEndpoint = $GatewayEndpoint
+        APIEndpoint = '/api/extensions'
         Method = 'Get'
-    }
-
-    if ($requestUri.Host -eq 'localhost')
-    {
-        $clientCertificateThumbprint = (Get-ItemProperty "HKLM:\Software\Microsoft\ServerManagementGateway").ClientCertificateThumbprint
-    }
-
-    if ($clientCertificateThumbprint)
-    {
-        $params.Add('CertificateThumbprint', "$certificateThumbprint")
     }
 
     if ($Credential)
     {
-        $params.Credential = $Credential
-    }
-    else
-    {
-        $params.UseDefaultCredentials = $True
+        $params.Add('Credential',$Credential)
     }
 
-    $response = Invoke-WebRequest @params -ErrorAction Stop
+    $requestParameters = Get-RequestParameter @params
+
+    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     $extensions = (ConvertFrom-Json -InputObject $response.Content).Values
 
     $extensionObject = @()
@@ -66,10 +52,19 @@
     
     if ($Status -ne 'All')
     {
-        return $extensionObject.Where({$_.Status -eq $Status})
+        $extensions = $extensionObject.Where({$_.Status -eq $Status})
     }
     else
     {
-        return $extensionObject
+        $extensions = $extensionObject
+    }
+
+    if ($ExtensionId)
+    {
+        return ($extensions | Where-Object { $_.id -eq $ExtensionId })
+    }
+    else
+    {
+        return $extensions
     }
 }
