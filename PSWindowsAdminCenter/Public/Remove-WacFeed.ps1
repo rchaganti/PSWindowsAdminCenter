@@ -25,6 +25,7 @@
         $params.Add('Credential', $Credential)
     }
 
+    Write-Verbose -Message 'Getting existing WAC feeds ...'
     $feeds = Get-WacFeed @params
     
     if ($feeds.Path -notcontains $Path)
@@ -41,9 +42,11 @@
     $params.Add('APIEndpoint', '/api/extensions/configs')
     $params.Add('Method','Put')
     
+    Write-Verbose -Message 'Generating request parameters ...'
     $requestParameters = Get-RequestParameter @params    
     $requestParameters.Add('Body', (ConvertTo-Json -InputObject $feedObject))
 
+    Write-Verbose -Message 'Invoking remove WAC feed api ...'
     $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
     if ($response.StatusCode -ne 200 )
     {

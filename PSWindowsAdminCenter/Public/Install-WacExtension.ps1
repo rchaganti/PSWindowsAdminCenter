@@ -21,6 +21,7 @@
     )
 
     # Check if extension is in the available list
+    Write-Verbose -Message 'Getting available WAC extensions ...'
     $extension = Get-WacExtension -GatewayEndpoint $GatewayEndpoint -Status Available -ExtensionId $ExtensionId | Select-Object id, @{l='version';e={[System.Version]$_.version}} | Sort-Object -Property Version
 
     if ($extension)
@@ -53,10 +54,31 @@
         {
             $params.Add('Credential',$Credential)
         }
-
+        
+        Write-Verbose -Message 'Generating request parameters ...'
         $requestParameters = Get-RequestParameter @params
 
+        Write-Verbose -Message 'Invoking install WAC extension api ...'
         $response = Invoke-WebRequest @requestParameters
+        if ($response.StatusCode -eq 200)
+        {
+            $getParams = @{
+                GatewayEndpoint = $GatewayEndpoint
+                extensionId = $ExtensionId
+                Status = 'Installed'
+            }
+            
+            if ($Credential)
+            {
+                $getParams.Add('Credential', $Credential)
+            }
+
+            return (Get-WacExtension @getParams)
+        }
+        else
+        {
+            throw 'Error invoking install WAC extension api ...'    
+        }
     }
     else
     {

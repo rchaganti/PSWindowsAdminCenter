@@ -43,6 +43,7 @@ function Add-WacConnection
     $params.Add('APIEndpoint', '/api/connections')
     $params.Add('Method','Put')
 
+    Write-Verbose -Message 'Generating request parameters ...'
     $requestParameters = Get-RequestParameter @params
 
     $connectionObject = @()
@@ -54,7 +55,9 @@ function Add-WacConnection
     }
 
     $requestParameters.Add('Body', '[' + $($connectionObject | ConvertTo-Json) + ']')
-    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
+
+    Write-Verbose -Message 'Invoking add WAC connection api ...'
+    $response = Invoke-WebRequest @requestParameters -ErrorAction SilentlyContinue
 
     if ($response.StatusCode -eq 200)
     {

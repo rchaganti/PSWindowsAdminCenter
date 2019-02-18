@@ -25,6 +25,7 @@
         $params.Add('Credential', $Credential)
     }
 
+    Write-Verbose -Message 'Getting existing WAC feeds ...'
     $feeds = Get-WacFeed @params
     
     if ($feeds.Path -Contains $Path)
@@ -41,10 +42,13 @@
     $params.Add('APIEndpoint','/api/extensions/configs')
     $params.Add('Method','Put')
 
+    Write-Verbose -Message 'Generating request parameters ...'
     $requestParameters = Get-RequestParameter @params
     $requestParameters.Add('Body', (ConvertTo-Json -InputObject $feedObject))
 
-    $response = Invoke-WebRequest @requestParameters -ErrorAction Stop
+    Write-Verbose -Message 'Invoking add WAC feed api ...'
+    $response = Invoke-WebRequest @requestParameters -ErrorAction SilentlyContinue
+
     if ($response.StatusCode -ne 200 )
     {
         throw "Failed to add the feed in the gateway"
