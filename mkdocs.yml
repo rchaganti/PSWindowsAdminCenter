@@ -1,5 +1,0 @@
-site_name: PS Windows Admin Center
-repo_url: https://github.com/rchaganti/pswindowsadmincenter
-theme: readthedocs
-pages:
-  - Home: index.md
