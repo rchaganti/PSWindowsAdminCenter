@@ -1,5 +1,5 @@
-site_name: Windows Admin Center PowerShell Commands
-repo_url: https://github.com/rchaganti/PSWindowsAdminCenter
+site_name: PS Windows Admin Center
+repo_url: https://github.com/rchaganti/pswindowsadmincenter
 theme: readthedocs
 pages:
-  - Home: index.md
+  - home: index.md
