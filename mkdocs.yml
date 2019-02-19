@@ -2,4 +2,4 @@ site_name: PS Windows Admin Center
 repo_url: https://github.com/rchaganti/pswindowsadmincenter
 theme: readthedocs
 pages:
-  - home: index.md
+  - Home: index.md
