@@ -33,5 +33,4 @@ foreach($import in @($public + $private))
 }
 
 #Export only the functions in public scripts
-#Export-ModuleMember -Function $Public.Basename
-Export-ModuleMember -Function *
+Export-ModuleMember -Function $Public.Basename
