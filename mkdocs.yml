@@ -3,12 +3,3 @@ repo_url: https://github.com/rchaganti/PSWindowsAdminCenter
 theme: readthedocs
 pages:
   - Home: index.md
-  - Get-WacConnection: Get-WacConnection.md
-  - Add-WacConnection: Add-WacConnection.md
-  - Get-WacExtension: Get-WacExtension.md
-  - Install-WacExtension: Install-WacExtension.md
-  - Uninstall-WacExtension: Uninstall-WacExtension.md
-  - Update-WacExtension: Update-WacExtension.md
-  - Get-WacFeed: Get-WacFeed.md
-  - Add-WacFeed: Add-WacFeed.md
-  - Remove-WacFeed: Remove-WacFeed.md
