@@ -16,11 +16,15 @@ This command adds a new connection in Windows Admin Center for management.
 Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName ad.my.lab -ConnectionType 'msft.sme.connection-type.server'
 ```
 
+The above command will add ad.my.lab as a server connection in Windows Admin Center.
+
 ## Example 2
 
 ```powershell
 Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName cluster.my.lab -ConnectionType 'msft.sme.connection-type.cluster' -Credential (Get-Credential)
 ```
+
+The above command will add cluster.my.lab as a failover cluster connection in Windows Admin Center. This command uses credentials to authenticate to WAC.
 
 ## Example 3
 
@@ -28,3 +32,4 @@ Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName cluster.my.
 Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName hcicluster.my.lab -ConnectionType 'msft.sme.connection-type.hyper-converged-cluster' -Tags 'hci','s2d'
 ```
 
+The above command will add hcicluster.my.lab as a Hyper-Converged Infrastructure connection in Windows Admin Center. This command also adds tags along with the connection.

@@ -9,7 +9,7 @@
 
         [Parameter()]
         [String]
-        $Name,
+        $ConnectionName,
 
         [Parameter()]
         [PSCredential]
@@ -36,9 +36,9 @@
     {
         $allConnections = (ConvertFrom-Json -InputObject $response.Content).Value.Properties
 
-        if ($Name)
+        if ($ConnectionName)
         {
-            $connections = $allConnections.Where({$_.Name -eq $Name})
+            $connections = $allConnections.Where({$_.Name -eq $ConnectionName})
         }
         else
         {
