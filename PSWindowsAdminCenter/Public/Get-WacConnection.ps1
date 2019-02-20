@@ -60,6 +60,15 @@
                 $connHash | Add-Member -MemberType NoteProperty -Name $propertyName -Value $conn.properties.$propertyName
             }
 
+            if ($conn.groupId -and ($conn.groupId -eq 'global'))
+            {
+                $connHash | Add-Member -MemberType NoteProperty -Name IsSharedConnection -Value $true
+            }
+            else
+            {
+                $connHash | Add-Member -MemberType NoteProperty -Name IsSharedConnection -Value $false
+            }
+
             $connectionObject += $connHash
         }
 

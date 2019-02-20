@@ -22,7 +22,11 @@ function Add-WacConnection
 
         [Parameter()]
         [PSCredential]
-        $Credential
+        $Credential,
+
+        [Parameter()]
+        [Switch]
+        $ShareConnection
     )
 
     $params = @{
@@ -34,6 +38,7 @@ function Add-WacConnection
         $params.Add('Credential',$Credential)
     }
 
+    Write-Verbose -Message 'Retrieving existig connections in WAC ...'
     $existingConections = [PSCustomObject[]](Get-WacConnection @params)
     if ($existingConections.Where({$_.Type -eq $ConnectionType}).Name -contains $ConnectionName)
     {
@@ -52,6 +57,12 @@ function Add-WacConnection
         type = $ConnectionType
         id = "${ConnectionType}!${ConnectionName}"
         tags = $Tags
+    }
+
+    if ($ShareConnection)
+    {
+        Write-Verbose -Message "Adding $ConnectionName as shared connection"
+        $connectionObject[0].Add('groupId','global')
     }
 
     $requestParameters.Add('Body', '[' + $($connectionObject | ConvertTo-Json) + ']')
