@@ -12,7 +12,7 @@ function Add-WacConnection
         $ConnectionName,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('msft.sme.connection-type.server','msft.sme.connection-type.cluster','msft.sme.connection-type.hyper-converged-cluster')]
+        [ValidateSet('msft.sme.connection-type.server','msft.sme.connection-type.cluster','msft.sme.connection-type.hyper-converged-cluster','msft.sme.connection-type.windows-client')]
         [String]
         $ConnectionType,
 
@@ -26,7 +26,7 @@ function Add-WacConnection
 
         [Parameter()]
         [Switch]
-        $ShareConnection
+        $SharedConnection
     )
 
     $params = @{
@@ -59,7 +59,7 @@ function Add-WacConnection
         tags = $Tags
     }
 
-    if ($ShareConnection)
+    if ($SharedConnection)
     {
         Write-Verbose -Message "Adding $ConnectionName as shared connection"
         $connectionObject[0].Add('groupId','global')

@@ -12,7 +12,7 @@
         $ConnectionName,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('msft.sme.connection-type.server','msft.sme.connection-type.cluster','msft.sme.connection-type.hyper-converged-cluster')]
+        [ValidateSet('msft.sme.connection-type.server','msft.sme.connection-type.cluster','msft.sme.connection-type.hyper-converged-cluster','msft.sme.connection-type.windows-client')]
         [String]
         $ConnectionType,
 
