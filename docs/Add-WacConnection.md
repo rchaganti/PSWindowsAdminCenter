@@ -2,13 +2,14 @@
 
 This command adds a new connection in Windows Admin Center for management. 
 
-| Parameter Name  | Description                                                  | Valid Values                                                 |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| GatewayEndpoint | Specifies the web URI at which WAC is running. This parameter is mandatory. | This must be full URI. For example, https://localhost:4040 or https://localhost or https://monitor.my.lab |
-| ConnectionName  | Specifies the name of the server or cluster to be added. This parameter is mandatory. | This needs to be a Fully-Qualifies Domain Name.              |
-| ConnectionType  | Specifies the type of the connection being added. This parameter is mandatory. | 'msft.sme.connection-type.server'<br />'msft.sme.connection-type.cluster'<br />'msft.sme.connection-type.hyper-converged-cluster' |
-| Tags            | Specifies any tags that need to be attached to the connection in WAC. |                                                              |
-| Credential      | Specifies the credentials needed to authenticate to WAC.     |                                                              |
+| Parameter Name   | Description                                                  | Valid Values                                                 |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| GatewayEndpoint  | Specifies the web URI at which WAC is running. This parameter is mandatory. | This must be full URI. For example, https://localhost:4040 or https://localhost or https://monitor.my.lab |
+| ConnectionName   | Specifies the name of the server or cluster to be added. This parameter is mandatory. | This needs to be a Fully-Qualifies Domain Name.              |
+| ConnectionType   | Specifies the type of the connection being added. This parameter is mandatory. | 'msft.sme.connection-type.server'<br />'msft.sme.connection-type.cluster'<br />'msft.sme.connection-type.hyper-converged-cluster'<br />msft.sme.connection-type.windows-client |
+| Tags             | Specifies any tags that need to be attached to the connection in WAC. |                                                              |
+| Credential       | Specifies the credentials needed to authenticate to WAC.     |                                                              |
+| SharedConnection | Specifies that the connection being added is a shared connection | This is a switch parameter.                                  |
 
 ## Example 1
 
@@ -33,3 +34,11 @@ Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName hcicluster.
 ```
 
 The above command will add hcicluster.my.lab as a Hyper-Converged Infrastructure connection in Windows Admin Center. This command also adds tags along with the connection.
+
+## Example 3
+
+```powershell
+Add-WacConnection -GatewayEndpoint https://localhost -ConnectionName hcicluster.my.lab -ConnectionType 'msft.sme.connection-type.hyper-converged-cluster' -Tags 'hci','s2d' -SharedConnection
+```
+
+The above command will add hcicluster.my.lab as a Hyper-Converged Infrastructure shared connection in Windows Admin Center. This command also adds tags along with the connection.
