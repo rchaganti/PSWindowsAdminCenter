@@ -1,4 +1,7 @@
-﻿Function Uninstall-WacExtension
+﻿<#
+
+#>
+Function Uninstall-WacExtension
 {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param

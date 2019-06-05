@@ -1,4 +1,7 @@
-﻿Function Update-WacExtension
+﻿<#
+
+#>
+Function Update-WacExtension
 {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param

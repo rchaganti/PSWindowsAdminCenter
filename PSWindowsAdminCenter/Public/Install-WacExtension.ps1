@@ -1,4 +1,6 @@
-﻿Function Install-WacExtension
+﻿<#
+#>
+Function Install-WacExtension
 {
     [CmdletBinding()]
     param

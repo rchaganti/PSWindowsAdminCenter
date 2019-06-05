@@ -1,4 +1,6 @@
-﻿function Get-WacConnection
+﻿<#
+#>
+function Get-WacConnection
 {
     [CmdletBinding()]
     param

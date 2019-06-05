@@ -1,4 +1,6 @@
-﻿Function Get-WacExtension
+﻿<#
+#>
+Function Get-WacExtension
 {
     [CmdletBinding()]
     param

@@ -1,4 +1,7 @@
-﻿function Remove-WacConnection
+﻿<#
+
+#>
+function Remove-WacConnection
 {
     [CmdletBinding()]
     param

@@ -1,4 +1,6 @@
-﻿Function Get-WacFeed
+﻿<#
+#>
+Function Get-WacFeed
 {
     [CmdletBinding()]
     param

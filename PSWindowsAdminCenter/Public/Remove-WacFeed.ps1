@@ -1,4 +1,7 @@
-﻿Function Remove-WacFeed
+﻿<#
+
+#>
+Function Remove-WacFeed
 {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
     param
